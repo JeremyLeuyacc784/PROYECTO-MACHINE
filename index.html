@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Seguimiento académico - Subir archivo</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 700px; margin: 60px auto; color: #222; }
+  h1 { font-size: 22px; }
+  p.subtitulo { color: #555; }
+  .caja {
+    border: 2px dashed #aaa; border-radius: 10px; padding: 30px;
+    text-align: center; margin-top: 25px;
+  }
+  input[type="file"] { margin: 15px 0; }
+  button {
+    background: #2c7a4b; color: white; border: none; padding: 10px 22px;
+    border-radius: 6px; font-size: 15px; cursor: pointer;
+  }
+  button:hover { background: #225f3a; }
+  .error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 6px; margin-top: 20px; }
+  .error ul { margin: 8px 0 0 18px; }
+  .ayuda { background: #eef3ee; padding: 15px; border-radius: 8px; font-size: 14px; margin-top: 25px; }
+  code { background: #fff; padding: 2px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Sistema de seguimiento académico</h1>
+<p class="subtitulo">Sube el archivo Excel o CSV con las notas y asistencia de tus estudiantes.</p>
+
+<form class="caja" action="/procesar" method="post" enctype="multipart/form-data">
+  <p>Selecciona el archivo (.xlsx o .csv)</p>
+  <input type="file" name="archivo" accept=".xlsx,.csv" required>
+  <br>
+  <button type="submit">Procesar archivo</button>
+</form>
+
+{% if error %}
+  <div class="error">{{ error }}</div>
+{% endif %}
+
+{% if errores %}
+  <div class="error">
+    <strong>Se encontraron los siguientes problemas en los datos:</strong>
+    <ul>
+      {% for e in errores %}
+        <li>{{ e }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+<div class="ayuda">
+  <strong>Formato esperado del archivo:</strong><br>
+  Columnas: <code>Nombre</code>, <code>T1</code>, <code>T2</code>, <code>T3</code>, <code>T4</code>
+  (notas de 1 a 20), y <code>Semana1</code> hasta <code>Semana16</code>
+  (asistencia: 0/1, o porcentaje 0-100).
+</div>
+
+</body>
+</html>
