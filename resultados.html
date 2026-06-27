@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resultados - Seguimiento académico</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 950px; margin: 40px auto; color: #222; }
+  h1 { font-size: 22px; }
+  h2 { font-size: 18px; margin-top: 35px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14px; }
+  th { background: #2c3e50; color: white; }
+  tr.APROBADO { background: #d4edda; }
+  tr.DESAPROBADO { background: #f8d7da; }
+  .resumen { display: flex; gap: 20px; margin-top: 15px; }
+  .tarjeta { flex: 1; padding: 14px; border-radius: 8px; text-align: center; }
+  .tarjeta.total { background: #eef3ee; }
+  .tarjeta.riesgo { background: #f8d7da; }
+  .tarjeta .numero { font-size: 28px; font-weight: bold; display: block; }
+  a.boton {
+    display: inline-block; background: #2c7a4b; color: white; text-decoration: none;
+    padding: 10px 20px; border-radius: 6px; margin-top: 20px;
+  }
+  a.volver { display: inline-block; margin-top: 25px; color: #2c7a4b; }
+</style>
+</head>
+<body>
+
+<h1>Resultados del seguimiento académico</h1>
+
+<div class="resumen">
+  <div class="tarjeta total">
+    <span class="numero">{{ total }}</span>
+    Total de estudiantes
+  </div>
+  <div class="tarjeta riesgo">
+    <span class="numero">{{ total_riesgo }}</span>
+    Estudiantes en riesgo
+  </div>
+</div>
+
+<a class="boton" href="/descargar">Descargar Excel con resultados</a>
+
+<h2>Estudiantes en riesgo de desaprobar (Nota Final &lt; 12)</h2>
+{% if en_riesgo %}
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>Asistencia (%)</th><th>Nota Final</th></tr>
+  </thead>
+  <tbody>
+    {% for est in en_riesgo %}
+    <tr class="DESAPROBADO">
+      <td>{{ est.Nombre }}</td>
+      <td>{{ est.T1 }}</td>
+      <td>{{ est.T2 }}</td>
+      <td>{{ est.T3 }}</td>
+      <td>{{ est.T4 }}</td>
+      <td>{{ est.Asistencia }}</td>
+      <td>{{ est.Nota_Final }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No hay estudiantes en riesgo. Todos aprobaron.</p>
+{% endif %}
+
+<h2>Listado completo de estudiantes</h2>
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>Asistencia (%)</th><th>Nota Final</th><th>Estado</th></tr>
+  </thead>
+  <tbody>
+    {% for est in estudiantes %}
+    <tr class="{{ est.Estado }}">
+      <td>{{ est.Nombre }}</td>
+      <td>{{ est.T1 }}</td>
+      <td>{{ est.T2 }}</td>
+      <td>{{ est.T3 }}</td>
+      <td>{{ est.T4 }}</td>
+      <td>{{ est.Asistencia }}</td>
+      <td>{{ est.Nota_Final }}</td>
+      <td>{{ est.Estado }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a class="volver" href="/">&larr; Subir otro archivo</a>
+
+</body>
+</html>
